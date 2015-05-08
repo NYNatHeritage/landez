@@ -332,6 +332,11 @@ class MBTilesBuilder(TilesManager):
         metadata['maxzoom'] = self.zoomlevels[-1]
         metadata['bounds'] = '%s,%s,%s,%s' % tuple(self.bounds)
         metadata['center'] = '%s,%s,%s' % (lon, lat, middlezoom)
+		# some servers require these additional data
+		metadata['name'] =  os.path.splitext(os.path.basename(self.filepath))[0]
+		metadata['type'] = 'baselayer'
+        metadata['version'] = '1.1'
+        metadata['description'] = 'WMSdata'
         #display informations from the grids on hover
         content_to_display = ''
         for field_name in self.grid_fields:
