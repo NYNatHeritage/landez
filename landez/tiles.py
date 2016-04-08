@@ -335,7 +335,7 @@ class MBTilesBuilder(TilesManager):
         # some servers require these additional data
         metadata['name'] =  os.path.splitext(os.path.basename(self.filepath))[0]
         metadata['type'] = 'baselayer'
-        metadata['version'] = '1.1'
+        metadata['version'] = '1.3'
         metadata['description'] = 'WMSdata'
         #display informations from the grids on hover
         content_to_display = ''
