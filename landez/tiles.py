@@ -241,9 +241,9 @@ class MBTilesBuilder(TilesManager):
         self.filepath = kwargs.get('filepath', DEFAULT_FILEPATH)
         self.ignore_errors = kwargs.get('ignore_errors', False)
         # Gather tiles for mbutil
-        basename, ext = os.path.splitext(os.path.basename(self.filepath))
+        self.basename, ext = os.path.splitext(os.path.basename(self.filepath))
         self.tmp_dir = kwargs.get('tmp_dir', DEFAULT_TMP_DIR)
-        self.tmp_dir = os.path.join(self.tmp_dir, basename)
+        self.tmp_dir = os.path.join(self.tmp_dir, self.basename)
         self.tile_format = kwargs.get('tile_format', DEFAULT_TILE_FORMAT)
 
         # Number of tiles in total
@@ -332,7 +332,7 @@ class MBTilesBuilder(TilesManager):
         lat = self.bounds[1] + (self.bounds[3] - self.bounds[1])/2
         lon = self.bounds[0] + (self.bounds[2] - self.bounds[0])/2
         metadata = {}
-        metadata['name'] = str(uuid.uuid4())
+        metadata['name'] = self.basename
         metadata['format'] = self._tile_extension[1:]
         metadata['minzoom'] = self.zoomlevels[0]
         metadata['maxzoom'] = self.zoomlevels[-1]
