@@ -115,8 +115,8 @@ class TilesManager(object):
         # Tile files extensions
         self._tile_extension = mimetypes.guess_extension(self.tile_format, strict=False)
         assert self._tile_extension, _("Unknown format %s") % self.tile_format
-        if self._tile_extension == '.jpe':
-            self._tile_extension = '.jpeg'
+        if self._tile_extension in ['jpeg', '.jpe']:
+            self._tile_extension = '.jpg'
 
         # Cache
         tiles_dir = kwargs.get('tiles_dir', DEFAULT_TMP_DIR)
@@ -353,7 +353,7 @@ class MBTilesBuilder(TilesManager):
 
         # Package it!
         logger.info(_("Build MBTiles file '%s'.") % self.filepath)
-        extension = self.tile_format.split("image/")[-1]
+        extension = self._tile_extension.lstrip('.')
         disk_to_mbtiles(
             self.tmp_dir,
             self.filepath,
