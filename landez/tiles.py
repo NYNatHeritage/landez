@@ -333,7 +333,9 @@ class MBTilesBuilder(TilesManager):
         lon = self.bounds[0] + (self.bounds[2] - self.bounds[0])/2
         metadata = {}
         metadata['name'] = self.basename
+        metadata['type'] = 'baselayer'
         metadata['version'] = '1.1'
+        metadata['description'] = 'WMSdata'
         metadata['format'] = self._tile_extension[1:]
         metadata['minzoom'] = self.zoomlevels[0]
         metadata['maxzoom'] = self.zoomlevels[-1]
