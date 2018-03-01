@@ -223,19 +223,31 @@ class WMSReader(TileSource):
         encodedparams = urllib.urlencode(self.wmsParams)
         url = "%s?%s" % (self.url, encodedparams)
         url += "&bbox=%s" % bbox   # commas are not encoded
-        try:
-            logger.debug(_("Download '%s'") % url)
-            request = urllib2.Request(url)
-            for header, value in self.headers.items():
-                request.add_header(header, value)
-            f = urllib2.urlopen(request)
-            header = f.info().typeheader
-            assert header == self.wmsParams['format'], "Invalid WMS response type : %s" % header
-            return f.read()
-        except (AssertionError, IOError):
-            raise ExtractionError
+		# if file comes over corrupted, try five times before failing
+        #for attempt in range(5):
+		r = DOWNLOAD_RETRIES
+        sleeptime = 1
+        while r > 0:
+            try:
+                logger.debug(_("Download '%s'") % url)
+                request = urllib2.Request(url)
+                for header, value in self.headers.items():
+                    request.add_header(header, value)
+                f = urllib2.urlopen(request)
+                header = f.info().typeheader
+                assert header == self.wmsParams['format'], "Invalid WMS response type : %s" % header
+                return f.read()
+            except (AssertionError, IOError), e:
+				logger.debug(_("Download error, retry (%s left). (%s)") % (r, e))
+                r -= 1
+                time.sleep(sleeptime)
+                # progressivly sleep longer to wait for this tile
+                if (sleeptime <= 10) and (r % 2 == 0):
+                    sleeptime += 1  # increase wait
+        else:
+            raise DownloadError(_("Cannot download URL %s") % url)
 
-
+			
 class MapnikRenderer(TileSource):
     def __init__(self, stylefile, tilesize=None):
         super(MapnikRenderer, self).__init__(tilesize)
