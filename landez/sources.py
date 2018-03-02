@@ -223,8 +223,6 @@ class WMSReader(TileSource):
         encodedparams = urllib.urlencode(self.wmsParams)
         url = "%s?%s" % (self.url, encodedparams)
         url += "&bbox=%s" % bbox   # commas are not encoded
-		# if file comes over corrupted, try five times before failing
-        #for attempt in range(5):
         r = DOWNLOAD_RETRIES
         sleeptime = 1
         while r > 0:
