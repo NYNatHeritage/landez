@@ -225,7 +225,7 @@ class WMSReader(TileSource):
         url += "&bbox=%s" % bbox   # commas are not encoded
 		# if file comes over corrupted, try five times before failing
         #for attempt in range(5):
-		r = DOWNLOAD_RETRIES
+        r = DOWNLOAD_RETRIES
         sleeptime = 1
         while r > 0:
             try:
@@ -238,7 +238,7 @@ class WMSReader(TileSource):
                 assert header == self.wmsParams['format'], "Invalid WMS response type : %s" % header
                 return f.read()
             except (AssertionError, IOError), e:
-				logger.debug(_("Download error, retry (%s left). (%s)") % (r, e))
+                logger.debug(_("Download error, retry (%s left). (%s)") % (r, e))
                 r -= 1
                 time.sleep(sleeptime)
                 # progressivly sleep longer to wait for this tile
