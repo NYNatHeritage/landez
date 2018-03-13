@@ -8,6 +8,7 @@ from gettext import gettext as _
 from pkg_resources import parse_version
 import urllib
 import urllib2
+import httplib
 from urlparse import urlparse
 from tempfile import NamedTemporaryFile
 from util import flip_y
@@ -235,7 +236,7 @@ class WMSReader(TileSource):
                 header = f.info().typeheader
                 assert header == self.wmsParams['format'], "Invalid WMS response type : %s" % header
                 return f.read()
-            except (AssertionError, IOError), e:
+            except (AssertionError, IOError, httplib.HTTPException), e:
                 logger.debug(_("Download error, retry (%s left). (%s)") % (r, e))
                 r -= 1
                 time.sleep(sleeptime)
